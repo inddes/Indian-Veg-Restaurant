@@ -13,7 +13,7 @@
   - `name` (text) - Dish name
   - `description` (text) - Dish description
   - `price` (decimal) - Price in rupees
-  - `category` (text) - Category (starters, main_course, breads, rice, noodles, fried_rice, manchurian)
+  - `category` (text) - Category (starters, south_indian, curries_gravies, tandoori, rice_biryani, breads, manchurian, noodles, fried_rice, indo_chinese_mains)
   - `cuisine_type` (text) - Either 'indian' or 'chinese'
   - `image_url` (text) - URL to dish image
   - `is_featured` (boolean) - Whether to show on homepage
@@ -142,52 +142,66 @@ CREATE INDEX IF NOT EXISTS idx_menu_items_featured ON menu_items(is_featured);
 CREATE INDEX IF NOT EXISTS idx_testimonials_featured ON testimonials(is_featured);
 CREATE INDEX IF NOT EXISTS idx_gallery_display_order ON gallery_images(display_order);
 
--- Insert sample menu items
-INSERT INTO menu_items (name, description, price, category, cuisine_type, image_url, is_featured, is_available) VALUES
+-- Insert menu items
 -- Indian Starters
-('Samosa', 'Crispy pastry filled with spiced potatoes and peas', 40.00, 'starters', 'indian', 'https://images.pexels.com/photos/14477887/pexels-photo-14477887.jpeg?auto=compress&cs=tinysrgb&w=800', true, true),
-('Paneer Tikka', 'Grilled cottage cheese marinated in aromatic spices', 180.00, 'starters', 'indian', 'https://images.pexels.com/photos/7625056/pexels-photo-7625056.jpeg?auto=compress&cs=tinysrgb&w=800', true, true),
-('Hara Bhara Kabab', 'Spinach and green peas patties with herbs', 150.00, 'starters', 'indian', 'https://images.pexels.com/photos/5560763/pexels-photo-5560763.jpeg?auto=compress&cs=tinysrgb&w=800', false, true),
-('Aloo Tikki', 'Crispy potato patties served with chutneys', 60.00, 'starters', 'indian', 'https://images.pexels.com/photos/14477881/pexels-photo-14477881.jpeg?auto=compress&cs=tinysrgb&w=800', false, true),
+INSERT INTO menu_items (name, description, price, category, cuisine_type, image_url, is_featured, is_available) VALUES
+('Aloo Bonda', 'Crispy potato-filled fritters with aromatic Indian spices.', 80.00, 'starters', 'indian', 'https://images.pexels.com/photos/31109618/pexels-photo-31109618.jpeg?auto=compress&cs=tinysrgb&w=800', true, true),
+('Dhokla', 'Soft and fluffy steamed savoury bites from Gujarat.', 70.00, 'starters', 'indian', 'https://images.pexels.com/photos/35041878/pexels-photo-35041878.jpeg?auto=compress&cs=tinysrgb&w=800', false, true),
+('Masala Vada', 'Crispy lentil fritters seasoned with herbs and spices.', 75.00, 'starters', 'indian', 'https://images.pexels.com/photos/21751212/pexels-photo-21751212.jpeg?auto=compress&cs=tinysrgb&w=800', false, true),
+('Paneer Tikka', 'Marinated paneer and vegetables grilled with Indian spices.', 180.00, 'starters', 'indian', 'https://images.pexels.com/photos/3928854/pexels-photo-3928854.png?auto=compress&cs=tinysrgb&w=800', true, true),
 
--- Indian Main Course
-('Paneer Butter Masala', 'Cottage cheese in rich creamy tomato gravy', 220.00, 'main_course', 'indian', 'https://images.pexels.com/photos/2474661/pexels-photo-2474661.jpeg?auto=compress&cs=tinysrgb&w=800', true, true),
-('Dal Makhani', 'Black lentils cooked overnight with butter and cream', 180.00, 'main_course', 'indian', 'https://images.pexels.com/photos/5410400/pexels-photo-5410400.jpeg?auto=compress&cs=tinysrgb&w=800', true, true),
-('Palak Paneer', 'Cottage cheese in creamy spinach gravy', 200.00, 'main_course', 'indian', 'https://images.pexels.com/photos/6210876/pexels-photo-6210876.jpeg?auto=compress&cs=tinysrgb&w=800', false, true),
-('Malai Kofta', 'Vegetable dumplings in rich cashew gravy', 210.00, 'main_course', 'indian', 'https://images.pexels.com/photos/5560763/pexels-photo-5560763.jpeg?auto=compress&cs=tinysrgb&w=800', false, true),
-('Chole Bhature', 'Spicy chickpeas with fluffy fried bread', 150.00, 'main_course', 'indian', 'https://images.pexels.com/photos/5560763/pexels-photo-5560763.jpeg?auto=compress&cs=tinysrgb&w=800', false, true),
+-- Indian South Indian
+('Masala Dosa', 'Crispy rice crepe filled with spiced potato masala.', 110.00, 'south_indian', 'indian', 'https://images.pexels.com/photos/12392915/pexels-photo-12392915.jpeg?auto=compress&cs=tinysrgb&w=800', true, true),
+('Idli Sambar', 'Steamed rice cakes served with lentil sambar and chutney.', 90.00, 'south_indian', 'indian', 'https://images.pexels.com/photos/35514447/pexels-photo-35514447.jpeg?auto=compress&cs=tinysrgb&w=800', false, true),
+('Uttapam', 'Thick savoury pancake topped with onions and tomatoes.', 100.00, 'south_indian', 'indian', 'https://images.pexels.com/photos/20422130/pexels-photo-20422130.jpeg?auto=compress&cs=tinysrgb&w=800', false, true),
+('Medu Vada', 'Crispy golden lentil donuts served with coconut chutney.', 85.00, 'south_indian', 'indian', 'https://images.pexels.com/photos/20422135/pexels-photo-20422135.jpeg?auto=compress&cs=tinysrgb&w=800', false, true),
+
+-- Indian Curries & Gravies
+('Paneer Butter Masala', 'Cottage cheese cubes in a rich, creamy tomato gravy.', 220.00, 'curries_gravies', 'indian', 'https://images.pexels.com/photos/11188417/pexels-photo-11188417.jpeg?auto=compress&cs=tinysrgb&w=800', true, true),
+('Dal Makhani', 'Black lentils slow-cooked overnight with butter and cream.', 180.00, 'curries_gravies', 'indian', 'https://images.pexels.com/photos/37182513/pexels-photo-37182513.jpeg?auto=compress&cs=tinysrgb&w=800', true, true),
+('Palak Paneer', 'Cottage cheese in a smooth, creamy spinach gravy.', 200.00, 'curries_gravies', 'indian', 'https://images.pexels.com/photos/31249589/pexels-photo-31249589.jpeg?auto=compress&cs=tinysrgb&w=800', false, true),
+('Malai Kofta', 'Vegetable and paneer dumplings in a rich cashew gravy.', 210.00, 'curries_gravies', 'indian', 'https://images.pexels.com/photos/36343375/pexels-photo-36343375.jpeg?auto=compress&cs=tinysrgb&w=800', false, true),
+('Chole Masala', 'Punjabi-style spicy chickpea curry with aromatic spices.', 160.00, 'curries_gravies', 'indian', 'https://images.pexels.com/photos/9287035/pexels-photo-9287035.jpeg?auto=compress&cs=tinysrgb&w=800', false, true),
+
+-- Indian Tandoori
+('Tandoori Paneer Tikka', 'Clay-oven grilled paneer with bell peppers and mint chutney.', 190.00, 'tandoori', 'indian', 'https://images.pexels.com/photos/33430556/pexels-photo-33430556.jpeg?auto=compress&cs=tinysrgb&w=800', true, true),
+('Veg Seekh Kebab', 'Skewered vegetable kebabs grilled in the tandoor.', 170.00, 'tandoori', 'indian', 'https://images.pexels.com/photos/37080242/pexels-photo-37080242.jpeg?auto=compress&cs=tinysrgb&w=800', false, true),
+('Tandoori Mushroom', 'Mushrooms marinated in yogurt and tandoori spices, grilled.', 175.00, 'tandoori', 'indian', 'https://images.pexels.com/photos/36701469/pexels-photo-36701469.jpeg?auto=compress&cs=tinysrgb&w=800', false, true),
+
+-- Indian Rice & Biryani
+('Veg Biryani', 'Aromatic basmati rice layered with mixed vegetables and saffron.', 200.00, 'rice_biryani', 'indian', 'https://images.pexels.com/photos/37303308/pexels-photo-37303308.jpeg?auto=compress&cs=tinysrgb&w=800', true, true),
+('Jeera Rice', 'Basmati rice tempered with fragrant cumin seeds.', 120.00, 'rice_biryani', 'indian', 'https://images.pexels.com/photos/28674713/pexels-photo-28674713.jpeg?auto=compress&cs=tinysrgb&w=800', false, true),
+('Peas Pulao', 'Fragrant basmati rice cooked with green peas and whole spices.', 140.00, 'rice_biryani', 'indian', 'https://images.pexels.com/photos/35552983/pexels-photo-35552983.jpeg?auto=compress&cs=tinysrgb&w=800', false, true),
 
 -- Indian Breads
-('Butter Naan', 'Soft leavened bread brushed with butter', 50.00, 'breads', 'indian', 'https://images.pexels.com/photos/6210959/pexels-photo-6210959.jpeg?auto=compress&cs=tinysrgb&w=800', false, true),
-('Garlic Naan', 'Naan bread topped with garlic and herbs', 60.00, 'breads', 'indian', 'https://images.pexels.com/photos/7625056/pexels-photo-7625056.jpeg?auto=compress&cs=tinysrgb&w=800', false, true),
-('Tandoori Roti', 'Whole wheat bread from clay oven', 30.00, 'breads', 'indian', 'https://images.pexels.com/photos/6210959/pexels-photo-6210959.jpeg?auto=compress&cs=tinysrgb&w=800', false, true),
-('Laccha Paratha', 'Layered whole wheat flatbread', 45.00, 'breads', 'indian', 'https://images.pexels.com/photos/5560763/pexels-photo-5560763.jpeg?auto=compress&cs=tinysrgb&w=800', false, true),
+('Butter Naan', 'Soft leavened bread brushed with butter from the tandoor.', 50.00, 'breads', 'indian', 'https://images.pexels.com/photos/16851842/pexels-photo-16851842.jpeg?auto=compress&cs=tinysrgb&w=800', false, true),
+('Garlic Naan', 'Naan bread topped with fresh garlic and coriander.', 60.00, 'breads', 'indian', 'https://images.pexels.com/photos/10337726/pexels-photo-10337726.jpeg?auto=compress&cs=tinysrgb&w=800', false, true),
+('Tandoori Roti', 'Whole wheat flatbread baked in the clay oven.', 30.00, 'breads', 'indian', 'https://images.pexels.com/photos/28674556/pexels-photo-28674556.jpeg?auto=compress&cs=tinysrgb&w=800', false, true),
+('Laccha Paratha', 'Flaky, layered whole wheat flatbread.', 45.00, 'breads', 'indian', 'https://images.pexels.com/photos/39833406/pexels-photo-39833406.jpeg?auto=compress&cs=tinysrgb&w=800', false, true),
 
--- Indian Rice
-('Veg Biryani', 'Aromatic basmati rice with mixed vegetables', 200.00, 'rice', 'indian', 'https://images.pexels.com/photos/3758134/pexels-photo-3758134.jpeg?auto=compress&cs=tinysrgb&w=800', true, true),
-('Jeera Rice', 'Basmati rice tempered with cumin', 120.00, 'rice', 'indian', 'https://images.pexels.com/photos/2456435/pexels-photo-2456435.jpeg?auto=compress&cs=tinysrgb&w=800', false, true),
-('Peas Pulao', 'Fragrant rice with green peas', 140.00, 'rice', 'indian', 'https://images.pexels.com/photos/2456435/pexels-photo-2456435.jpeg?auto=compress&cs=tinysrgb&w=800', false, true),
+-- Indo-Chinese Starters
+('Chilli Paneer', 'Paneer tossed with peppers, onions and a spicy Indo-Chinese sauce.', 180.00, 'starters', 'chinese', 'https://images.pexels.com/photos/29631468/pexels-photo-29631468.jpeg?auto=compress&cs=tinysrgb&w=800', true, true),
+('Chilli Gobi', 'Crispy cauliflower tossed in a spicy chilli and garlic sauce.', 160.00, 'starters', 'chinese', 'https://images.pexels.com/photos/35071824/pexels-photo-35071824.jpeg?auto=compress&cs=tinysrgb&w=800', false, true),
+('Honey Chilli Potato', 'Crispy potatoes coated in a sweet and spicy chilli glaze.', 130.00, 'starters', 'chinese', 'https://images.pexels.com/photos/11485199/pexels-photo-11485199.jpeg?auto=compress&cs=tinysrgb&w=800', true, true),
+('Veg Spring Rolls', 'Crispy golden rolls filled with seasoned vegetables.', 120.00, 'starters', 'chinese', 'https://images.pexels.com/photos/37261945/pexels-photo-37261945.jpeg?auto=compress&cs=tinysrgb&w=800', false, true),
 
--- Chinese Starters
-('Veg Spring Rolls', 'Crispy rolls with mixed vegetables', 120.00, 'starters', 'chinese', 'https://images.pexels.com/photos/2664216/pexels-photo-2664216.jpeg?auto=compress&cs=tinysrgb&w=800', true, true),
-('Veg Momos', 'Steamed dumplings with vegetable filling', 100.00, 'starters', 'chinese', 'https://images.pexels.com/photos/4518843/pexels-photo-4518843.jpeg?auto=compress&cs=tinysrgb&w=800', false, true),
-('Crispy Veg', 'Vegetables tossed in sweet and sour sauce', 140.00, 'starters', 'chinese', 'https://images.pexels.com/photos/2664216/pexels-photo-2664216.jpeg?auto=compress&cs=tinysrgb&w=800', false, true),
-('Honey Chilli Potato', 'Crispy potatoes in honey chilli glaze', 130.00, 'starters', 'chinese', 'https://images.pexels.com/photos/2664216/pexels-photo-2664216.jpeg?auto=compress&cs=tinysrgb&w=800', false, true),
+-- Indo-Chinese Manchurian
+('Gobi Manchurian', 'Crispy cauliflower coated in a tangy Manchurian sauce.', 150.00, 'manchurian', 'chinese', 'https://images.pexels.com/photos/28674543/pexels-photo-28674543.jpeg?auto=compress&cs=tinysrgb&w=800', true, true),
+('Veg Manchurian', 'Vegetable balls in a tangy, spicy Indo-Chinese gravy.', 150.00, 'manchurian', 'chinese', 'https://images.pexels.com/photos/35066808/pexels-photo-35066808.jpeg?auto=compress&cs=tinysrgb&w=800', false, true),
+('Paneer Manchurian', 'Cottage cheese cubes in a spicy Manchurian gravy.', 170.00, 'manchurian', 'chinese', 'https://images.pexels.com/photos/31783383/pexels-photo-31783383.jpeg?auto=compress&cs=tinysrgb&w=800', false, true),
 
--- Chinese Noodles
-('Hakka Noodles', 'Stir-fried noodles with vegetables', 140.00, 'noodles', 'chinese', 'https://images.pexels.com/photos/1907244/pexels-photo-1907244.jpeg?auto=compress&cs=tinysrgb&w=800', true, true),
-('Schezwan Noodles', 'Spicy noodles in schezwan sauce', 160.00, 'noodles', 'chinese', 'https://images.pexels.com/photos/1907244/pexels-photo-1907244.jpeg?auto=compress&cs=tinysrgb&w=800', false, true),
-('Singapore Noodles', 'Curry flavored rice noodles', 170.00, 'noodles', 'chinese', 'https://images.pexels.com/photos/1907244/pexels-photo-1907244.jpeg?auto=compress&cs=tinysrgb&w=800', false, true),
+-- Indo-Chinese Noodles
+('Vegetable Hakka Noodles', 'Stir-fried noodles with fresh vegetables and Indo-Chinese sauces.', 140.00, 'noodles', 'chinese', 'https://images.pexels.com/photos/37165674/pexels-photo-37165674.jpeg?auto=compress&cs=tinysrgb&w=800', true, true),
+('Schezwan Noodles', 'Spicy noodles tossed in fiery schezwan sauce with vegetables.', 160.00, 'noodles', 'chinese', 'https://images.pexels.com/photos/35779075/pexels-photo-35779075.jpeg?auto=compress&cs=tinysrgb&w=800', false, true),
 
--- Chinese Fried Rice
-('Veg Fried Rice', 'Classic fried rice with mixed vegetables', 130.00, 'fried_rice', 'chinese', 'https://images.pexels.com/photos/1624487/pexels-photo-1624487.jpeg?auto=compress&cs=tinysrgb&w=800', true, true),
-('Schezwan Fried Rice', 'Spicy fried rice in schezwan sauce', 150.00, 'fried_rice', 'chinese', 'https://images.pexels.com/photos/1624487/pexels-photo-1624487.jpeg?auto=compress&cs=tinysrgb&w=800', false, true),
-('Triple Schezwan Rice', 'Loaded fried rice with noodles and gravy', 180.00, 'fried_rice', 'chinese', 'https://images.pexels.com/photos/1624487/pexels-photo-1624487.jpeg?auto=compress&cs=tinysrgb&w=800', false, true),
+-- Indo-Chinese Fried Rice
+('Veg Fried Rice', 'Classic fried rice with mixed vegetables and soy sauce.', 130.00, 'fried_rice', 'chinese', 'https://images.pexels.com/photos/35588196/pexels-photo-35588196.jpeg?auto=compress&cs=tinysrgb&w=800', true, true),
+('Schezwan Fried Rice', 'Spicy fried rice tossed in schezwan sauce with vegetables.', 150.00, 'fried_rice', 'chinese', 'https://images.pexels.com/photos/9148224/pexels-photo-9148224.jpeg?auto=compress&cs=tinysrgb&w=800', false, true),
 
--- Chinese Manchurian
-('Veg Manchurian', 'Vegetable balls in tangy sauce', 150.00, 'manchurian', 'chinese', 'https://images.pexels.com/photos/2664216/pexels-photo-2664216.jpeg?auto=compress&cs=tinysrgb&w=800', true, true),
-('Paneer Manchurian', 'Cottage cheese in spicy manchurian gravy', 170.00, 'manchurian', 'chinese', 'https://images.pexels.com/photos/2664216/pexels-photo-2664216.jpeg?auto=compress&cs=tinysrgb&w=800', false, true),
-('Gobi Manchurian', 'Cauliflower in indo-chinese sauce', 140.00, 'manchurian', 'chinese', 'https://images.pexels.com/photos/2664216/pexels-photo-2664216.jpeg?auto=compress&cs=tinysrgb&w=800', false, true);
+-- Indo-Chinese Mains
+('Chilli Mushroom', 'Mushrooms tossed with peppers, onions and Indo-Chinese seasoning.', 170.00, 'indo_chinese_mains', 'chinese', 'https://images.pexels.com/photos/5848433/pexels-photo-5848433.jpeg?auto=compress&cs=tinysrgb&w=800', false, true),
+('Veg Manchurian Gravy', 'Vegetable Manchurian balls in a rich, spicy gravy served hot.', 160.00, 'indo_chinese_mains', 'chinese', 'https://images.pexels.com/photos/29631489/pexels-photo-29631489.jpeg?auto=compress&cs=tinysrgb&w=800', false, true),
+('Schezwan Chilli Potato', 'Crispy potatoes in a fiery schezwan and chilli sauce.', 140.00, 'indo_chinese_mains', 'chinese', 'https://images.pexels.com/photos/28674530/pexels-photo-28674530.jpeg?auto=compress&cs=tinysrgb&w=800', false, true);
 
 -- Insert sample testimonials
 INSERT INTO testimonials (customer_name, rating, review, is_featured) VALUES
