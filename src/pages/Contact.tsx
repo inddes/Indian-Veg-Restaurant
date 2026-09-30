@@ -20,7 +20,7 @@ const RESTAURANT = {
   address: 'Mawney Road, Romford, London RM7 8HK, United Kingdom',
   phone: '+44 7455 154515',
   phoneDisplay: '+44 7455 154515',
-  email: 'info@spicegarden.com',
+  email: 'contact@spicegarden.co.uk',
   hours: 'Monday \u2013 Sunday',
   hoursValue: '11:00 AM \u2013 11:00 PM',
   mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Mawney+Road+Romford+London+RM7+8HK',

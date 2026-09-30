@@ -11,17 +11,12 @@ const corsHeaders = {
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 
-// Restaurant contact details -- read from server-side secrets, never exposed to frontend
+// Restaurant contact details -- read from server-side secrets, never exposed to frontend.
+// RESTAURANT_CONTACT_PHONE is used for display/Call-Us only; no SMS provider is required.
 const RESTAURANT_CONTACT_EMAIL = Deno.env.get("RESTAURANT_CONTACT_EMAIL") || "";
-const RESTAURANT_CONTACT_PHONE = Deno.env.get("RESTAURANT_CONTACT_PHONE") || "";
 
 // Email provider: Resend (https://resend.com) -- API key configured as edge function secret
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY") || "";
-
-// SMS provider: Twilio -- credentials configured as edge function secrets
-const TWILIO_ACCOUNT_SID = Deno.env.get("TWILIO_ACCOUNT_SID") || "";
-const TWILIO_AUTH_TOKEN = Deno.env.get("TWILIO_AUTH_TOKEN") || "";
-const TWILIO_FROM_NUMBER = Deno.env.get("TWILIO_FROM_NUMBER") || "";
 
 const RATE_LIMIT_MAX = 5; // max submissions per IP per hour
 const RATE_LIMIT_WINDOW_MINUTES = 60;
@@ -77,7 +72,6 @@ function isValidEmail(email: string): boolean {
  */
 function isValidPhone(phone: string): boolean {
   const cleaned = phone.replace(/[\s\-()]/g, "");
-  // International format with +, or UK domestic
   if (/^\+\d{7,15}$/.test(cleaned)) return true;
   if (/^0\d{7,14}$/.test(cleaned)) return true; // UK domestic leading 0
   return false;
@@ -132,46 +126,6 @@ async function sendEmail(
     return true;
   } catch (err) {
     console.error("[email] send failed:", (err as Error).message);
-    return false;
-  }
-}
-
-// ── SMS sending via Twilio ──────────────────────────────────────────────
-
-async function sendSms(to: string, body: string): Promise<boolean> {
-  if (!TWILIO_ACCOUNT_SID || !TWILIO_AUTH_TOKEN || !TWILIO_FROM_NUMBER) {
-    console.error(
-      "[sms] Twilio credentials not configured (TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_FROM_NUMBER) -- skipping SMS.",
-    );
-    return false;
-  }
-
-  try {
-    const auth = btoa(`${TWILIO_ACCOUNT_SID}:${TWILIO_AUTH_TOKEN}`);
-    const res = await fetch(
-      `https://api.twilio.com/2010-04-01/Accounts/${TWILIO_ACCOUNT_SID}/Messages.json`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Basic ${auth}`,
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: new URLSearchParams({
-          From: TWILIO_FROM_NUMBER,
-          To: to,
-          Body: body,
-        }),
-      },
-    );
-
-    if (!res.ok) {
-      const detail = await res.text();
-      console.error(`[sms] Twilio API error ${res.status}: ${detail}`);
-      return false;
-    }
-    return true;
-  } catch (err) {
-    console.error("[sms] send failed:", (err as Error).message);
     return false;
   }
 }
@@ -309,8 +263,11 @@ Deno.serve(async (req: Request) => {
     await logRateLimit(ipHash);
 
     const submittedAt = new Date(insertData.created_at).toISOString();
+    const enquiryId = insertData.id;
 
     // ── Email notification to the restaurant ───────────────────────────
+    // If the email fails AFTER the enquiry is saved, we log the failure but
+    // still return success -- the enquiry is safely stored in the database.
     const restaurantEmailSent = await sendEmail(
       RESTAURANT_CONTACT_EMAIL,
       `New Website Enquiry \u2013 ${subject} \u2013 ${name}`,
@@ -332,8 +289,14 @@ Deno.serve(async (req: Request) => {
       email, // Reply-To = customer's email
     );
 
+    if (!restaurantEmailSent) {
+      console.error(
+        `[email] Restaurant notification email failed for enquiry ${enquiryId}. The enquiry is saved in contact_submissions and can be reviewed in the admin.`,
+      );
+    }
+
     // ── Customer acknowledgement email ────────────────────────────────
-    await sendEmail(
+    const customerEmailSent = await sendEmail(
       email,
       "We\u2019ve received your message \u2013 Spice Garden",
       `
@@ -343,16 +306,16 @@ Deno.serve(async (req: Request) => {
       `,
     );
 
-    // ── SMS notification to the restaurant phone ───────────────────────
-    if (RESTAURANT_CONTACT_PHONE) {
-      const smsBody = `Spice Garden: New website enquiry from ${name}. Subject: ${subject}. Phone: ${phone}. Please check your email/admin enquiries.`;
-      await sendSms(RESTAURANT_CONTACT_PHONE, smsBody);
+    if (!customerEmailSent) {
+      console.error(
+        `[email] Customer acknowledgement email failed for enquiry ${enquiryId}.`,
+      );
     }
 
     // ── Response ───────────────────────────────────────────────────────
     // Success is returned as long as the DB insert succeeded (the enquiry is saved).
-    // Email/SMS delivery is best-effort -- we log failures server-side but don't fail
-    // the request, because the enquiry is safely stored and can be reviewed in the admin.
+    // Email delivery is best-effort -- failures are logged server-side with the
+    // enquiry ID so the restaurant can still find the enquiry in the database.
     return json(
       {
         success: true,

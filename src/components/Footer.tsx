@@ -67,8 +67,8 @@ export default function Footer() {
               </li>
               <li className="flex items-center space-x-2">
                 <Mail className="w-4 h-4 flex-shrink-0" />
-                <a href="mailto:info@spicegarden.com" className="hover:text-orange-400 transition-colors">
-                  info@spicegarden.com
+                <a href="mailto:contact@spicegarden.co.uk" className="hover:text-orange-400 transition-colors">
+                  contact@spicegarden.co.uk
                 </a>
               </li>
             </ul>
