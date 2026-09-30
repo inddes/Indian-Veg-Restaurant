@@ -1,126 +1,376 @@
-import { useEffect, useState } from 'react';
-import { supabase } from '../lib/supabase';
-import { UtensilsCrossed, Home } from 'lucide-react';
+import { useState, useEffect, useCallback } from 'react';
+import { Link } from 'react-router-dom';
+import { Leaf, X, UtensilsCrossed, MapPin, Sparkles } from 'lucide-react';
 
-interface GalleryImage {
+type Cuisine = 'indian' | 'chinese';
+
+interface Dish {
   id: string;
-  image_url: string;
-  caption: string;
-  category: 'food' | 'interior';
+  name: string;
+  description: string;
+  cuisine: Cuisine;
+  image: string;
 }
 
+const dishes: Dish[] = [
+  {
+    id: 'g-in-1',
+    name: 'Paneer Tikka',
+    description: 'Soft paneer marinated in aromatic Indian spices and grilled for a delicious smoky finish.',
+    cuisine: 'indian',
+    image: 'https://images.pexels.com/photos/3928854/pexels-photo-3928854.png?auto=compress&cs=tinysrgb&w=800',
+  },
+  {
+    id: 'g-in-2',
+    name: 'Masala Dosa',
+    description: 'Crispy golden rice crepe filled with spiced potato masala and served with chutneys.',
+    cuisine: 'indian',
+    image: 'https://images.pexels.com/photos/20422138/pexels-photo-20422138.jpeg?auto=compress&cs=tinysrgb&w=800',
+  },
+  {
+    id: 'g-in-3',
+    name: 'Chole Bhature',
+    description: 'Fluffy deep-fried bread served with a rich and spicy chickpea curry.',
+    cuisine: 'indian',
+    image: 'https://images.pexels.com/photos/36388454/pexels-photo-36388454.jpeg?auto=compress&cs=tinysrgb&w=800',
+  },
+  {
+    id: 'g-in-4',
+    name: 'Pav Bhaji',
+    description: 'Buttery spiced vegetable mash served with toasted soft bread rolls.',
+    cuisine: 'indian',
+    image: 'https://images.pexels.com/photos/166654/pexels-photo-166654.jpeg?auto=compress&cs=tinysrgb&w=800',
+  },
+  {
+    id: 'g-in-5',
+    name: 'Vegetable Biryani',
+    description: 'Fragrant basmati rice layered with mixed vegetables, saffron and whole spices.',
+    cuisine: 'indian',
+    image: 'https://images.pexels.com/photos/12669168/pexels-photo-12669168.jpeg?auto=compress&cs=tinysrgb&w=800',
+  },
+  {
+    id: 'g-in-6',
+    name: 'Palak Paneer',
+    description: 'Cottage cheese cubes simmered in a smooth, creamy spinach gravy.',
+    cuisine: 'indian',
+    image: 'https://images.pexels.com/photos/31249589/pexels-photo-31249589.jpeg?auto=compress&cs=tinysrgb&w=800',
+  },
+  {
+    id: 'g-in-7',
+    name: 'Dal Tadka',
+    description: 'Yellow lentils tempered with ghee, cumin, garlic and dried red chillies.',
+    cuisine: 'indian',
+    image: 'https://images.pexels.com/photos/38108860/pexels-photo-38108860.jpeg?auto=compress&cs=tinysrgb&w=800',
+  },
+  {
+    id: 'g-in-8',
+    name: 'Malai Kofta',
+    description: 'Soft paneer and vegetable dumplings served in a rich, creamy cashew gravy.',
+    cuisine: 'indian',
+    image: 'https://images.pexels.com/photos/36343375/pexels-photo-36343375.jpeg?auto=compress&cs=tinysrgb&w=800',
+  },
+  {
+    id: 'g-in-9',
+    name: 'Samosa Chaat',
+    description: 'Crushed crispy samosas topped with chickpeas, chutneys, yogurt and sev.',
+    cuisine: 'indian',
+    image: 'https://images.pexels.com/photos/23286188/pexels-photo-23286188.jpeg?auto=compress&cs=tinysrgb&w=800',
+  },
+  {
+    id: 'g-in-10',
+    name: 'Dhokla',
+    description: 'Soft, fluffy steamed savoury cakes from Gujarat with a tangy mustard tempering.',
+    cuisine: 'indian',
+    image: 'https://images.pexels.com/photos/35041878/pexels-photo-35041878.jpeg?auto=compress&cs=tinysrgb&w=800',
+  },
+  {
+    id: 'g-ch-1',
+    name: 'Chilli Paneer',
+    description: 'Paneer cubes tossed with peppers, onions and a spicy Indo-Chinese sauce.',
+    cuisine: 'chinese',
+    image: 'https://images.pexels.com/photos/29631468/pexels-photo-29631468.jpeg?auto=compress&cs=tinysrgb&w=800',
+  },
+  {
+    id: 'g-ch-2',
+    name: 'Gobi Manchurian',
+    description: 'Crispy cauliflower florets coated in a tangy, spicy Manchurian sauce.',
+    cuisine: 'chinese',
+    image: 'https://images.pexels.com/photos/35071828/pexels-photo-35071828.jpeg?auto=compress&cs=tinysrgb&w=800',
+  },
+  {
+    id: 'g-ch-3',
+    name: 'Vegetable Manchurian',
+    description: 'Spiced vegetable balls simmered in a bold Indo-Chinese Manchurian gravy.',
+    cuisine: 'chinese',
+    image: 'https://images.pexels.com/photos/28674530/pexels-photo-28674530.jpeg?auto=compress&cs=tinysrgb&w=800',
+  },
+  {
+    id: 'g-ch-4',
+    name: 'Chilli Mushroom',
+    description: 'Mushrooms tossed with peppers, onions and fiery Indo-Chinese seasoning.',
+    cuisine: 'chinese',
+    image: 'https://images.pexels.com/photos/5848433/pexels-photo-5848433.jpeg?auto=compress&cs=tinysrgb&w=800',
+  },
+  {
+    id: 'g-ch-5',
+    name: 'Honey Chilli Potato',
+    description: 'Crispy potato strips coated in a sweet, sticky and spicy chilli glaze.',
+    cuisine: 'chinese',
+    image: 'https://images.pexels.com/photos/11485199/pexels-photo-11485199.jpeg?auto=compress&cs=tinysrgb&w=800',
+  },
+  {
+    id: 'g-ch-6',
+    name: 'Vegetable Hakka Noodles',
+    description: 'Stir-fried noodles tossed with fresh vegetables and Indo-Chinese sauces.',
+    cuisine: 'chinese',
+    image: 'https://images.pexels.com/photos/37165674/pexels-photo-37165674.jpeg?auto=compress&cs=tinysrgb&w=800',
+  },
+  {
+    id: 'g-ch-7',
+    name: 'Schezwan Noodles',
+    description: 'Noodles tossed in a fiery schezwan sauce with crunchy vegetables.',
+    cuisine: 'chinese',
+    image: 'https://images.pexels.com/photos/35779075/pexels-photo-35779075.jpeg?auto=compress&cs=tinysrgb&w=800',
+  },
+  {
+    id: 'g-ch-8',
+    name: 'Vegetable Fried Rice',
+    description: 'Classic fried rice with mixed vegetables and savoury soy seasoning.',
+    cuisine: 'chinese',
+    image: 'https://images.pexels.com/photos/35588196/pexels-photo-35588196.jpeg?auto=compress&cs=tinysrgb&w=800',
+  },
+];
+
+const cuisineMeta: Record<Cuisine, { label: string; flag: string; accentBg: string; accentText: string }> = {
+  indian: {
+    label: 'Indian Cuisine',
+    flag: '🇮🇳',
+    accentBg: 'bg-orange-600',
+    accentText: 'text-orange-600',
+  },
+  chinese: {
+    label: 'Indo-Chinese',
+    flag: '🥢',
+    accentBg: 'bg-red-600',
+    accentText: 'text-red-600',
+  },
+};
+
+type Filter = 'all' | Cuisine;
+
 export default function Gallery() {
-  const [activeFilter, setActiveFilter] = useState<'all' | 'food' | 'interior'>('all');
-  const [images, setImages] = useState<GalleryImage[]>([]);
+  const [activeFilter, setActiveFilter] = useState<Filter>('all');
+  const [selectedDish, setSelectedDish] = useState<Dish | null>(null);
 
-  useEffect(() => {
-    fetchGalleryImages();
-  }, []);
-
-  async function fetchGalleryImages() {
-    const { data } = await supabase
-      .from('gallery_images')
-      .select('*')
-      .order('display_order');
-
-    if (data) setImages(data);
-  }
-
-  const filteredImages = images.filter(
-    (image) => activeFilter === 'all' || image.category === activeFilter
+  const filteredDishes = dishes.filter(
+    (dish) => activeFilter === 'all' || dish.cuisine === activeFilter
   );
 
+  const closeLightbox = useCallback(() => setSelectedDish(null), []);
+
+  useEffect(() => {
+    if (selectedDish) {
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = '';
+      };
+    }
+  }, [selectedDish]);
+
+  useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') closeLightbox();
+    };
+    window.addEventListener('keydown', handleEsc);
+    return () => window.removeEventListener('keydown', handleEsc);
+  }, [closeLightbox]);
+
+  const filters: { key: Filter; label: string; flag?: string }[] = [
+    { key: 'all', label: 'All' },
+    { key: 'indian', label: 'Indian Cuisine', flag: '🇮🇳' },
+    { key: 'chinese', label: 'Indo-Chinese', flag: '🥢' },
+  ];
+
   return (
-    <div className="min-h-screen pt-20 bg-gradient-to-b from-orange-50 to-white">
+    <div className="min-h-screen pt-20 bg-gradient-to-b from-orange-50 via-orange-50/50 to-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="text-center mb-12">
+        {/* Header */}
+        <div className="text-center mb-10">
+          <div className="inline-flex items-center space-x-2 bg-green-600/90 px-4 py-2 rounded-full mb-6">
+            <Leaf className="w-5 h-5 text-white" />
+            <span className="text-white font-semibold text-sm">100% Pure Vegetarian</span>
+          </div>
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Gallery</h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Take a visual journey through our delicious food and welcoming ambiance
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
+            A feast for your eyes &ndash; explore our colourful, freshly prepared Indian and Indo-Chinese vegetarian favourites.
+          </p>
+          <p className="mt-3 text-sm font-semibold tracking-wide text-orange-600">
+            100% Vegetarian &bull; Freshly Prepared &bull; Full of Flavour
           </p>
         </div>
 
+        {/* Filters */}
         <div className="flex justify-center mb-12">
-          <div className="inline-flex bg-white rounded-lg shadow-md p-1 flex-wrap gap-1">
-            <button
-              onClick={() => setActiveFilter('all')}
-              className={`px-6 py-3 rounded-lg font-semibold transition-all duration-200 ${
-                activeFilter === 'all'
-                  ? 'bg-orange-600 text-white shadow-lg'
-                  : 'text-gray-700 hover:bg-gray-100'
-              }`}
-            >
-              All
-            </button>
-            <button
-              onClick={() => setActiveFilter('food')}
-              className={`px-6 py-3 rounded-lg font-semibold transition-all duration-200 flex items-center space-x-2 ${
-                activeFilter === 'food'
-                  ? 'bg-orange-600 text-white shadow-lg'
-                  : 'text-gray-700 hover:bg-gray-100'
-              }`}
-            >
-              <UtensilsCrossed className="w-4 h-4" />
-              <span>Food</span>
-            </button>
-            <button
-              onClick={() => setActiveFilter('interior')}
-              className={`px-6 py-3 rounded-lg font-semibold transition-all duration-200 flex items-center space-x-2 ${
-                activeFilter === 'interior'
-                  ? 'bg-orange-600 text-white shadow-lg'
-                  : 'text-gray-700 hover:bg-gray-100'
-              }`}
-            >
-              <Home className="w-4 h-4" />
-              <span>Interior</span>
-            </button>
+          <div className="inline-flex bg-white rounded-xl shadow-md p-1.5 flex-wrap gap-1">
+            {filters.map((filter) => (
+              <button
+                key={filter.key}
+                onClick={() => setActiveFilter(filter.key)}
+                className={`px-5 py-2.5 rounded-lg font-semibold transition-all duration-200 flex items-center space-x-2 ${
+                  activeFilter === filter.key
+                    ? 'bg-orange-600 text-white shadow-lg'
+                    : 'text-gray-700 hover:bg-gray-100'
+                }`}
+              >
+                {filter.flag && <span className="text-base">{filter.flag}</span>}
+                <span>{filter.label}</span>
+              </button>
+            ))}
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredImages.map((image) => (
-            <div
-              key={image.id}
-              className="group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1"
-            >
-              <div className="aspect-square overflow-hidden">
-                <img
-                  src={image.image_url}
-                  alt={image.caption}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-              </div>
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <div className="absolute bottom-0 left-0 right-0 p-6">
-                  <p className="text-white font-semibold text-lg">{image.caption}</p>
-                  <span className="inline-block mt-2 px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-white text-xs">
-                    {image.category === 'food' ? '🍽️ Food' : '🏠 Interior'}
+        {/* Gallery Grid */}
+        <div key={activeFilter} className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 animate-fadeIn">
+          {filteredDishes.map((dish) => {
+            const meta = cuisineMeta[dish.cuisine];
+            return (
+              <div
+                key={dish.id}
+                onClick={() => setSelectedDish(dish)}
+                className="group relative overflow-hidden rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer bg-white"
+              >
+                {/* Image */}
+                <div className="aspect-[4/3] overflow-hidden">
+                  <img
+                    src={dish.image}
+                    alt={dish.name}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    loading="lazy"
+                  />
+                </div>
+
+                {/* Hover overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
+                  <div className="flex items-center space-x-1.5 mb-1">
+                    <Leaf className="w-4 h-4 text-green-400" />
+                    <span className="text-white font-bold text-base">{dish.name}</span>
+                  </div>
+                  <span className="inline-block px-2.5 py-1 bg-white/20 backdrop-blur-sm rounded-full text-white text-xs font-medium w-fit">
+                    {meta.flag} {meta.label}
                   </span>
+                  <div className="mt-2 inline-flex items-center space-x-1 text-orange-300 text-sm font-semibold">
+                    <UtensilsCrossed className="w-4 h-4" />
+                    <span>View Dish</span>
+                  </div>
+                </div>
+
+                {/* Veg badge */}
+                <div className="absolute top-2.5 left-2.5">
+                  <div className="flex items-center space-x-1 bg-green-600 px-2 py-0.5 rounded-full shadow-md">
+                    <Leaf className="w-3 h-3 text-white" />
+                    <span className="text-white text-[10px] font-medium">Veg</span>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
-        {filteredImages.length === 0 && (
-          <div className="text-center py-20">
-            <p className="text-gray-500 text-lg">No images found in this category.</p>
+        {/* CTA Section */}
+        <div className="mt-16 bg-gradient-to-r from-orange-600 to-red-600 rounded-2xl p-8 md:p-12 text-white text-center overflow-hidden relative">
+          <div className="absolute -right-8 -top-8 opacity-10">
+            <Sparkles className="w-40 h-40" />
           </div>
-        )}
-
-        <div className="mt-16 bg-gradient-to-r from-orange-600 to-red-600 rounded-2xl p-8 text-white text-center">
-          <h3 className="text-2xl font-bold mb-2">Experience It In Person</h3>
-          <p className="mb-6">Visit us to enjoy the ambiance and taste the delicious food</p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a
-              href="tel:+447455154515"
-              className="inline-block bg-white text-orange-600 hover:bg-gray-100 px-8 py-3 rounded-lg font-semibold transition-colors duration-200"
-            >
-              Call to Book: +44 7455 154515
-            </a>
+          <div className="relative z-10">
+            <h3 className="text-2xl md:text-3xl font-bold mb-3">Looks Delicious? It Tastes Even Better.</h3>
+            <p className="text-lg opacity-90 mb-6 max-w-xl mx-auto leading-relaxed">
+              From comforting Indian classics to bold Indo-Chinese favourites, discover a vegetarian menu made to satisfy every craving.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link
+                to="/menu"
+                className="inline-flex items-center justify-center space-x-2 bg-white text-orange-600 hover:bg-gray-100 px-8 py-3 rounded-lg font-semibold transition-colors duration-200"
+              >
+                <UtensilsCrossed className="w-5 h-5" />
+                <span>Explore Our Menu</span>
+              </Link>
+              <Link
+                to="/contact"
+                className="inline-flex items-center justify-center space-x-2 bg-white/20 hover:bg-white/30 backdrop-blur-sm border border-white/30 px-8 py-3 rounded-lg font-semibold transition-colors duration-200"
+              >
+                <MapPin className="w-5 h-5" />
+                <span>Visit Us</span>
+              </Link>
+            </div>
           </div>
         </div>
       </div>
+
+      {/* Lightbox */}
+      {selectedDish && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fadeIn"
+          onClick={closeLightbox}
+        >
+          <div
+            className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full overflow-hidden max-h-[90vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Image */}
+            <div className="relative">
+              <div className="aspect-[16/10] overflow-hidden">
+                <img
+                  src={selectedDish.image}
+                  alt={selectedDish.name}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <button
+                onClick={closeLightbox}
+                className="absolute top-3 right-3 bg-black/60 hover:bg-black/80 text-white rounded-full p-2 transition-colors duration-200"
+                aria-label="Close"
+              >
+                <X className="w-5 h-5" />
+              </button>
+              <div className="absolute top-3 left-3">
+                <div className="flex items-center space-x-1 bg-green-600 px-2.5 py-1 rounded-full shadow-md">
+                  <Leaf className="w-3.5 h-3.5 text-white" />
+                  <span className="text-white text-xs font-medium">Veg</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Content */}
+            <div className="p-6">
+              <div className="flex items-center space-x-2 mb-2">
+                <Leaf className="w-5 h-5 text-green-500" />
+                <h3 className="text-2xl font-bold text-gray-900">{selectedDish.name}</h3>
+              </div>
+              <p className="text-gray-600 leading-relaxed mb-3">
+                {selectedDish.description}
+              </p>
+              <div className="mb-6">
+                <span
+                  className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${
+                    selectedDish.cuisine === 'indian'
+                      ? 'bg-orange-100 text-orange-700'
+                      : 'bg-red-100 text-red-700'
+                  }`}
+                >
+                  {cuisineMeta[selectedDish.cuisine].flag} {cuisineMeta[selectedDish.cuisine].label}
+                </span>
+              </div>
+              <Link
+                to="/menu"
+                className="inline-flex items-center justify-center space-x-2 bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors duration-200"
+              >
+                <UtensilsCrossed className="w-5 h-5" />
+                <span>View Menu</span>
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
