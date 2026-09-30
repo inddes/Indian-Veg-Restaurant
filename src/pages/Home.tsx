@@ -228,7 +228,7 @@ export default function Home() {
           <h2 className="text-3xl md:text-4xl font-bold mb-4">Visit Us Today</h2>
           <p className="text-xl mb-2">Open Daily: 11:00 AM - 11:00 PM</p>
           <p className="text-lg opacity-90 mb-8">
-            123 MG Road, Bangalore, Karnataka 560001
+            Mawney Road, Romford, London RM7 8HK
           </p>
           <Link
             to="/contact"

@@ -61,7 +61,7 @@ export default function Navigation() {
               </Link>
             ))}
             <a
-              href="tel:+919876543210"
+              href="tel:+447455154515"
               className="flex items-center space-x-2 bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 transition-colors duration-200"
             >
               <Phone className="w-4 h-4" />
@@ -100,11 +100,11 @@ export default function Navigation() {
             ))}
             <div className="pt-2 border-t border-gray-200 space-y-2">
               <a
-                href="tel:+919876543210"
+                href="tel:+447455154515"
                 className="flex items-center space-x-2 text-gray-700 text-sm"
               >
                 <Phone className="w-4 h-4" />
-                <span>+91 98765 43210</span>
+                <span>+44 7455 154515</span>
               </a>
               <div className="flex items-center space-x-2 text-gray-700 text-sm">
                 <Clock className="w-4 h-4" />

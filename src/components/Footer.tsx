@@ -57,12 +57,12 @@ export default function Footer() {
             <ul className="space-y-3 text-sm text-gray-400">
               <li className="flex items-start space-x-2">
                 <MapPin className="w-4 h-4 mt-1 flex-shrink-0" />
-                <span>123 MG Road, Bangalore, Karnataka 560001</span>
+                <span>Mawney Road, Romford, London RM7 8HK</span>
               </li>
               <li className="flex items-center space-x-2">
                 <Phone className="w-4 h-4 flex-shrink-0" />
-                <a href="tel:+919876543210" className="hover:text-orange-400 transition-colors">
-                  +91 98765 43210
+                <a href="tel:+447455154515" className="hover:text-orange-400 transition-colors">
+                  +44 7455 154515
                 </a>
               </li>
               <li className="flex items-center space-x-2">

@@ -49,9 +49,9 @@ export default function Contact() {
                 <div>
                   <h3 className="font-semibold text-gray-900 mb-1">Address</h3>
                   <p className="text-gray-600">
-                    123 MG Road, Bangalore
+                    Mawney Road, Romford
                     <br />
-                    Karnataka 560001, India
+                    London RM7 8HK, United Kingdom
                   </p>
                 </div>
               </div>
@@ -63,10 +63,10 @@ export default function Contact() {
                 <div>
                   <h3 className="font-semibold text-gray-900 mb-1">Phone</h3>
                   <a
-                    href="tel:+919876543210"
+                    href="tel:+447455154515"
                     className="text-gray-600 hover:text-orange-600 transition-colors"
                   >
-                    +91 98765 43210
+                    +44 7455 154515
                   </a>
                   <p className="text-sm text-gray-500 mt-1">
                     WhatsApp available on this number
@@ -110,10 +110,10 @@ export default function Contact() {
                 Call us to reserve your table for a special occasion or a casual meal
               </p>
               <a
-                href="tel:+919876543210"
+                href="tel:+447455154515"
                 className="inline-block bg-white text-orange-600 hover:bg-gray-100 px-6 py-2 rounded-lg font-semibold transition-colors duration-200 text-sm"
               >
-                Call Now: +91 98765 43210
+                Call Now: +44 7455 154515
               </a>
             </div>
           </div>
@@ -171,7 +171,7 @@ export default function Contact() {
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-600 focus:border-transparent transition-all"
-                  placeholder="+91 98765 43210"
+                  placeholder="+44 7455 154515"
                 />
               </div>
 
@@ -204,7 +204,7 @@ export default function Contact() {
 
         <div className="rounded-2xl overflow-hidden shadow-lg h-96">
           <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3887.9444445555555!2d77.6000000!3d12.9716000!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTLCsDU4JzE3LjgiTiA3N8KwMzYnMDAuMCJF!5e0!3m2!1sen!2sin!4v1234567890"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2486.892!2d0.1855!3d51.5812!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNTHCsDM0JzUyLjMiTiAwwrAxMScxNS44Ilc!5e0!3m2!1sen!2suk!4v1700000000000"
             width="100%"
             height="100%"
             style={{ border: 0 }}

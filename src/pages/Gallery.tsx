@@ -113,10 +113,10 @@ export default function Gallery() {
           <p className="mb-6">Visit us to enjoy the ambiance and taste the delicious food</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
-              href="tel:+919876543210"
+              href="tel:+447455154515"
               className="inline-block bg-white text-orange-600 hover:bg-gray-100 px-8 py-3 rounded-lg font-semibold transition-colors duration-200"
             >
-              Call to Book: +91 98765 43210
+              Call to Book: +44 7455 154515
             </a>
           </div>
         </div>
