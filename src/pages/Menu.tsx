@@ -563,7 +563,7 @@ export default function Menu() {
                       </p>
                       <div className="flex items-center justify-between">
                         <span className={`text-2xl font-bold ${meta.accentText}`}>
-                          £{dish.price}
+                          £{dish.price.toFixed(2)}
                         </span>
                         <div className="flex items-center space-x-1 text-gray-400">
                           <Leaf className="w-4 h-4 text-green-500" />
