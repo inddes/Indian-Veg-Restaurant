@@ -35,13 +35,13 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link to="/about" className="text-gray-400 hover:text-orange-400 transition-colors">
-                  About Us
+                <Link to="/gallery" className="text-gray-400 hover:text-orange-400 transition-colors">
+                  Gallery
                 </Link>
               </li>
               <li>
-                <Link to="/gallery" className="text-gray-400 hover:text-orange-400 transition-colors">
-                  Gallery
+                <Link to="/about" className="text-gray-400 hover:text-orange-400 transition-colors">
+                  About Us
                 </Link>
               </li>
               <li>

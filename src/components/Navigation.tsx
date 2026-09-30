@@ -23,8 +23,8 @@ export default function Navigation() {
   const navLinks = [
     { name: 'Home', path: '/' },
     { name: 'Menu', path: '/menu' },
-    { name: 'About Us', path: '/about' },
     { name: 'Gallery', path: '/gallery' },
+    { name: 'About Us', path: '/about' },
     { name: 'Contact', path: '/contact' },
   ];
 
