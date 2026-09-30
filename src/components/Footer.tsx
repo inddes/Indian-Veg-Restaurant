@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { MapPin, Phone, Mail, Clock, Facebook, Instagram } from 'lucide-react';
+import { restaurantConfig, fullAddress } from '../data/restaurantConfig';
 
 export default function Footer() {
   return (
@@ -12,8 +13,8 @@ export default function Footer() {
                 <span className="text-white font-bold">🌱</span>
               </div>
               <div>
-                <h3 className="text-lg font-bold">Spice Garden</h3>
-                <p className="text-xs text-orange-400">Pure Vegetarian</p>
+                <h3 className="text-lg font-bold">{restaurantConfig.name}</h3>
+                <p className="text-xs text-orange-400">{restaurantConfig.tagline}</p>
               </div>
             </div>
             <p className="text-sm text-gray-400">
@@ -57,18 +58,18 @@ export default function Footer() {
             <ul className="space-y-3 text-sm text-gray-400">
               <li className="flex items-start space-x-2">
                 <MapPin className="w-4 h-4 mt-1 flex-shrink-0" />
-                <span>Mawney Road, Romford, London RM7 8HK</span>
+                <span>{fullAddress}</span>
               </li>
               <li className="flex items-center space-x-2">
                 <Phone className="w-4 h-4 flex-shrink-0" />
-                <a href="tel:+447455154515" className="hover:text-orange-400 transition-colors">
-                  +44 7455 154515
+                <a href={`tel:${restaurantConfig.phone.replace(/\s/g, '')}`} className="hover:text-orange-400 transition-colors">
+                  {restaurantConfig.phoneDisplay}
                 </a>
               </li>
               <li className="flex items-center space-x-2">
                 <Mail className="w-4 h-4 flex-shrink-0" />
-                <a href="mailto:contact@spicegarden.co.uk" className="hover:text-orange-400 transition-colors">
-                  contact@spicegarden.co.uk
+                <a href={`mailto:${restaurantConfig.email}`} className="hover:text-orange-400 transition-colors">
+                  {restaurantConfig.email}
                 </a>
               </li>
             </ul>
@@ -79,14 +80,14 @@ export default function Footer() {
             <div className="flex items-start space-x-2 text-sm text-gray-400 mb-4">
               <Clock className="w-4 h-4 mt-1 flex-shrink-0" />
               <div>
-                <p>Monday - Sunday</p>
-                <p className="text-orange-400 font-medium">11:00 AM - 11:00 PM</p>
+                <p>{restaurantConfig.openingHoursDays}</p>
+                <p className="text-orange-400 font-medium">{restaurantConfig.openingHoursTimes}</p>
               </div>
             </div>
             <h4 className="font-semibold mb-3">Follow Us</h4>
             <div className="flex space-x-3">
               <a
-                href="https://facebook.com"
+                href={restaurantConfig.social.facebook}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-9 h-9 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-orange-600 transition-colors"
@@ -94,7 +95,7 @@ export default function Footer() {
                 <Facebook className="w-4 h-4" />
               </a>
               <a
-                href="https://instagram.com"
+                href={restaurantConfig.social.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-9 h-9 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-orange-600 transition-colors"
@@ -106,7 +107,7 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400">
-          <p>&copy; {new Date().getFullYear()} Spice Garden. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} {restaurantConfig.name}. All rights reserved.</p>
         </div>
       </div>
     </footer>

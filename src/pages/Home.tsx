@@ -1,16 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { supabase } from '../lib/supabase';
 import { ChevronRight, Star, Leaf, UtensilsCrossed, Clock, Heart } from 'lucide-react';
-
-interface MenuItem {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  image_url: string;
-  cuisine_type: string;
-}
+import { supabase } from '../lib/supabase';
+import { getFeaturedDishes, formatPrice, cuisineMeta } from '../data/menuData';
+import { restaurantConfig, fullAddress } from '../data/restaurantConfig';
 
 interface Testimonial {
   id: string;
@@ -19,24 +12,14 @@ interface Testimonial {
   review: string;
 }
 
+const featuredDishes = getFeaturedDishes();
+
 export default function Home() {
-  const [featuredDishes, setFeaturedDishes] = useState<MenuItem[]>([]);
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
 
   useEffect(() => {
-    fetchFeaturedDishes();
     fetchTestimonials();
   }, []);
-
-  async function fetchFeaturedDishes() {
-    const { data } = await supabase
-      .from('menu_items')
-      .select('*')
-      .eq('is_featured', true)
-      .limit(6);
-
-    if (data) setFeaturedDishes(data);
-  }
 
   async function fetchTestimonials() {
     const { data } = await supabase
@@ -144,35 +127,45 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {featuredDishes.map((dish) => (
-              <div
-                key={dish.id}
-                className="group bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
-              >
-                <div className="relative h-64 overflow-hidden">
-                  <img
-                    src={dish.image_url}
-                    alt={dish.name}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                  />
-                  <div className="absolute top-4 right-4">
-                    <span className={`px-3 py-1 rounded-full text-xs font-semibold text-white ${
-                      dish.cuisine_type === 'indian' ? 'bg-orange-600' : 'bg-red-600'
-                    }`}>
-                      {dish.cuisine_type === 'indian' ? '🇮🇳 Indian' : '🥢 Chinese'}
-                    </span>
+            {featuredDishes.map((dish) => {
+              const cm = cuisineMeta[dish.cuisine];
+              return (
+                <Link
+                  key={dish.id}
+                  to={`/menu#${dish.slug}`}
+                  className="group bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
+                >
+                  <div className="relative h-64 overflow-hidden">
+                    <img
+                      src={dish.image}
+                      alt={dish.alt}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      loading="lazy"
+                    />
+                    <div className="absolute top-4 right-4">
+                      <span className={`px-3 py-1 rounded-full text-xs font-semibold text-white ${
+                        dish.cuisine === 'indian' ? 'bg-orange-600' : 'bg-red-600'
+                      }`}>
+                        {cm.flag} {cm.label}
+                      </span>
+                    </div>
                   </div>
-                </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">{dish.name}</h3>
-                  <p className="text-gray-600 text-sm mb-4 line-clamp-2">{dish.description}</p>
-                  <div className="flex items-center justify-between">
-                    <span className="text-2xl font-bold text-orange-600">₹{dish.price}</span>
-                    <Leaf className="w-5 h-5 text-green-600" />
+                  <div className="p-6">
+                    <h3 className="text-xl font-bold text-gray-900 mb-2">{dish.name}</h3>
+                    <p className="text-gray-600 text-sm mb-4 line-clamp-2">{dish.description}</p>
+                    <div className="flex items-center justify-between">
+                      <span className="text-2xl font-bold text-orange-600">
+                        {formatPrice(dish.price)}
+                      </span>
+                      <div className="flex items-center space-x-1 text-gray-400">
+                        <Leaf className="w-5 h-5 text-green-600" />
+                        <span className="text-xs font-medium text-green-600">Pure Veg</span>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-            ))}
+                </Link>
+              );
+            })}
           </div>
 
           <div className="text-center mt-12">
@@ -226,9 +219,9 @@ export default function Home() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <Clock className="w-16 h-16 mx-auto mb-6 opacity-90" />
           <h2 className="text-3xl md:text-4xl font-bold mb-4">Visit Us Today</h2>
-          <p className="text-xl mb-2">Open Daily: 11:00 AM - 11:00 PM</p>
+          <p className="text-xl mb-2">Open Daily: {restaurantConfig.openingHoursTimes}</p>
           <p className="text-lg opacity-90 mb-8">
-            Mawney Road, Romford, London RM7 8HK
+            {fullAddress}
           </p>
           <Link
             to="/contact"

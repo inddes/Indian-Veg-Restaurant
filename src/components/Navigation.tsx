@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Phone, Clock } from 'lucide-react';
+import { restaurantConfig } from '../data/restaurantConfig';
 
 export default function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -41,8 +42,8 @@ export default function Navigation() {
               <span className="text-white font-bold text-xl">🌱</span>
             </div>
             <div>
-              <h1 className="text-xl font-bold text-gray-900">Spice Garden</h1>
-              <p className="text-xs text-orange-600">Pure Vegetarian</p>
+              <h1 className="text-xl font-bold text-gray-900">{restaurantConfig.name}</h1>
+              <p className="text-xs text-orange-600">{restaurantConfig.tagline}</p>
             </div>
           </Link>
 
@@ -61,7 +62,7 @@ export default function Navigation() {
               </Link>
             ))}
             <a
-              href="tel:+447455154515"
+              href={`tel:${restaurantConfig.phone.replace(/\s/g, '')}`}
               className="flex items-center space-x-2 bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 transition-colors duration-200"
             >
               <Phone className="w-4 h-4" />
@@ -100,15 +101,15 @@ export default function Navigation() {
             ))}
             <div className="pt-2 border-t border-gray-200 space-y-2">
               <a
-                href="tel:+447455154515"
+                href={`tel:${restaurantConfig.phone.replace(/\s/g, '')}`}
                 className="flex items-center space-x-2 text-gray-700 text-sm"
               >
                 <Phone className="w-4 h-4" />
-                <span>+44 7455 154515</span>
+                <span>{restaurantConfig.phoneDisplay}</span>
               </a>
               <div className="flex items-center space-x-2 text-gray-700 text-sm">
                 <Clock className="w-4 h-4" />
-                <span>11:00 AM - 11:00 PM</span>
+                <span>{restaurantConfig.openingHoursTimes}</span>
               </div>
             </div>
           </div>

@@ -1,170 +1,22 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { Leaf, X, UtensilsCrossed, MapPin, Sparkles } from 'lucide-react';
+import {
+  type CuisineType,
+  type Dish,
+  dishes as allDishes,
+  cuisineMeta,
+} from '../data/menuData';
 
-type Cuisine = 'indian' | 'chinese';
-
-interface Dish {
-  id: string;
-  name: string;
-  description: string;
-  cuisine: Cuisine;
-  image: string;
-}
-
-const dishes: Dish[] = [
-  {
-    id: 'g-in-1',
-    name: 'Paneer Tikka',
-    description: 'Soft paneer marinated in aromatic Indian spices and grilled for a delicious smoky finish.',
-    cuisine: 'indian',
-    image: 'https://images.pexels.com/photos/3928854/pexels-photo-3928854.png?auto=compress&cs=tinysrgb&w=800',
-  },
-  {
-    id: 'g-in-2',
-    name: 'Masala Dosa',
-    description: 'Crispy golden rice crepe filled with spiced potato masala and served with chutneys.',
-    cuisine: 'indian',
-    image: 'https://images.pexels.com/photos/20422138/pexels-photo-20422138.jpeg?auto=compress&cs=tinysrgb&w=800',
-  },
-  {
-    id: 'g-in-3',
-    name: 'Chole Bhature',
-    description: 'Fluffy deep-fried bread served with a rich and spicy chickpea curry.',
-    cuisine: 'indian',
-    image: 'https://images.pexels.com/photos/36388454/pexels-photo-36388454.jpeg?auto=compress&cs=tinysrgb&w=800',
-  },
-  {
-    id: 'g-in-4',
-    name: 'Pav Bhaji',
-    description: 'Buttery spiced vegetable mash served with toasted soft bread rolls.',
-    cuisine: 'indian',
-    image: 'https://images.pexels.com/photos/166654/pexels-photo-166654.jpeg?auto=compress&cs=tinysrgb&w=800',
-  },
-  {
-    id: 'g-in-5',
-    name: 'Vegetable Biryani',
-    description: 'Fragrant basmati rice layered with mixed vegetables, saffron and whole spices.',
-    cuisine: 'indian',
-    image: 'https://images.pexels.com/photos/12669168/pexels-photo-12669168.jpeg?auto=compress&cs=tinysrgb&w=800',
-  },
-  {
-    id: 'g-in-6',
-    name: 'Palak Paneer',
-    description: 'Cottage cheese cubes simmered in a smooth, creamy spinach gravy.',
-    cuisine: 'indian',
-    image: 'https://images.pexels.com/photos/31249589/pexels-photo-31249589.jpeg?auto=compress&cs=tinysrgb&w=800',
-  },
-  {
-    id: 'g-in-7',
-    name: 'Dal Tadka',
-    description: 'Yellow lentils tempered with ghee, cumin, garlic and dried red chillies.',
-    cuisine: 'indian',
-    image: 'https://images.pexels.com/photos/38108860/pexels-photo-38108860.jpeg?auto=compress&cs=tinysrgb&w=800',
-  },
-  {
-    id: 'g-in-8',
-    name: 'Malai Kofta',
-    description: 'Soft paneer and vegetable dumplings served in a rich, creamy cashew gravy.',
-    cuisine: 'indian',
-    image: 'https://images.pexels.com/photos/36343375/pexels-photo-36343375.jpeg?auto=compress&cs=tinysrgb&w=800',
-  },
-  {
-    id: 'g-in-9',
-    name: 'Samosa Chaat',
-    description: 'Crushed crispy samosas topped with chickpeas, chutneys, yogurt and sev.',
-    cuisine: 'indian',
-    image: 'https://images.pexels.com/photos/23286188/pexels-photo-23286188.jpeg?auto=compress&cs=tinysrgb&w=800',
-  },
-  {
-    id: 'g-in-10',
-    name: 'Dhokla',
-    description: 'Soft, fluffy steamed savoury cakes from Gujarat with a tangy mustard tempering.',
-    cuisine: 'indian',
-    image: 'https://images.pexels.com/photos/35041878/pexels-photo-35041878.jpeg?auto=compress&cs=tinysrgb&w=800',
-  },
-  {
-    id: 'g-ch-1',
-    name: 'Chilli Paneer',
-    description: 'Paneer cubes tossed with peppers, onions and a spicy Indo-Chinese sauce.',
-    cuisine: 'chinese',
-    image: 'https://images.pexels.com/photos/29631468/pexels-photo-29631468.jpeg?auto=compress&cs=tinysrgb&w=800',
-  },
-  {
-    id: 'g-ch-2',
-    name: 'Gobi Manchurian',
-    description: 'Crispy cauliflower florets coated in a tangy, spicy Manchurian sauce.',
-    cuisine: 'chinese',
-    image: 'https://images.pexels.com/photos/35071828/pexels-photo-35071828.jpeg?auto=compress&cs=tinysrgb&w=800',
-  },
-  {
-    id: 'g-ch-3',
-    name: 'Vegetable Manchurian',
-    description: 'Spiced vegetable balls simmered in a bold Indo-Chinese Manchurian gravy.',
-    cuisine: 'chinese',
-    image: 'https://images.pexels.com/photos/28674530/pexels-photo-28674530.jpeg?auto=compress&cs=tinysrgb&w=800',
-  },
-  {
-    id: 'g-ch-4',
-    name: 'Chilli Mushroom',
-    description: 'Mushrooms tossed with peppers, onions and fiery Indo-Chinese seasoning.',
-    cuisine: 'chinese',
-    image: 'https://images.pexels.com/photos/5848433/pexels-photo-5848433.jpeg?auto=compress&cs=tinysrgb&w=800',
-  },
-  {
-    id: 'g-ch-5',
-    name: 'Honey Chilli Potato',
-    description: 'Crispy potato strips coated in a sweet, sticky and spicy chilli glaze.',
-    cuisine: 'chinese',
-    image: 'https://images.pexels.com/photos/11485199/pexels-photo-11485199.jpeg?auto=compress&cs=tinysrgb&w=800',
-  },
-  {
-    id: 'g-ch-6',
-    name: 'Vegetable Hakka Noodles',
-    description: 'Stir-fried noodles tossed with fresh vegetables and Indo-Chinese sauces.',
-    cuisine: 'chinese',
-    image: 'https://images.pexels.com/photos/37165674/pexels-photo-37165674.jpeg?auto=compress&cs=tinysrgb&w=800',
-  },
-  {
-    id: 'g-ch-7',
-    name: 'Schezwan Noodles',
-    description: 'Noodles tossed in a fiery schezwan sauce with crunchy vegetables.',
-    cuisine: 'chinese',
-    image: 'https://images.pexels.com/photos/35779075/pexels-photo-35779075.jpeg?auto=compress&cs=tinysrgb&w=800',
-  },
-  {
-    id: 'g-ch-8',
-    name: 'Vegetable Fried Rice',
-    description: 'Classic fried rice with mixed vegetables and savoury soy seasoning.',
-    cuisine: 'chinese',
-    image: 'https://images.pexels.com/photos/35588196/pexels-photo-35588196.jpeg?auto=compress&cs=tinysrgb&w=800',
-  },
-];
-
-const cuisineMeta: Record<Cuisine, { label: string; flag: string; accentBg: string; accentText: string }> = {
-  indian: {
-    label: 'Indian Cuisine',
-    flag: '🇮🇳',
-    accentBg: 'bg-orange-600',
-    accentText: 'text-orange-600',
-  },
-  chinese: {
-    label: 'Indo-Chinese',
-    flag: '🥢',
-    accentBg: 'bg-red-600',
-    accentText: 'text-red-600',
-  },
-};
-
-type Filter = 'all' | Cuisine;
+type Filter = 'all' | CuisineType;
 
 export default function Gallery() {
   const [activeFilter, setActiveFilter] = useState<Filter>('all');
   const [selectedDish, setSelectedDish] = useState<Dish | null>(null);
 
-  const filteredDishes = dishes.filter(
-    (dish) => activeFilter === 'all' || dish.cuisine === activeFilter
-  );
+  const filteredDishes = activeFilter === 'all'
+    ? allDishes
+    : allDishes.filter((dish) => dish.cuisine === activeFilter);
 
   const closeLightbox = useCallback(() => setSelectedDish(null), []);
 
@@ -243,7 +95,7 @@ export default function Gallery() {
                 <div className="aspect-[4/3] overflow-hidden">
                   <img
                     src={dish.image}
-                    alt={dish.name}
+                    alt={dish.alt}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                     loading="lazy"
                   />
@@ -321,7 +173,7 @@ export default function Gallery() {
               <div className="aspect-[16/10] overflow-hidden">
                 <img
                   src={selectedDish.image}
-                  alt={selectedDish.name}
+                  alt={selectedDish.alt}
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -361,11 +213,11 @@ export default function Gallery() {
                 </span>
               </div>
               <Link
-                to="/menu"
+                to={`/menu#${selectedDish.slug}`}
                 className="inline-flex items-center justify-center space-x-2 bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors duration-200"
               >
                 <UtensilsCrossed className="w-5 h-5" />
-                <span>View Menu</span>
+                <span>View on Menu</span>
               </Link>
             </div>
           </div>

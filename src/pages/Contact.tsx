@@ -12,19 +12,7 @@ import {
   User,
   MessageSquare,
 } from 'lucide-react';
-
-// ── Restaurant contact details ──────────────────────────────────────────
-// These are the known details from the existing site. If any need updating,
-// change them here (and in the corresponding edge function secrets for email/SMS).
-const RESTAURANT = {
-  address: 'Mawney Road, Romford, London RM7 8HK, United Kingdom',
-  phone: '+44 7455 154515',
-  phoneDisplay: '+44 7455 154515',
-  email: 'contact@spicegarden.co.uk',
-  hours: 'Monday \u2013 Sunday',
-  hoursValue: '11:00 AM \u2013 11:00 PM',
-  mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Mawney+Road+Romford+London+RM7+8HK',
-};
+import { restaurantConfig, fullAddress } from '../data/restaurantConfig';
 
 const SUBJECT_OPTIONS = [
   'General Enquiry',
@@ -544,7 +532,7 @@ export default function Contact() {
                   </div>
                   <div className="min-w-0">
                     <h3 className="font-semibold text-gray-900 mb-1">Address</h3>
-                    <p className="text-gray-600 text-sm leading-relaxed">{RESTAURANT.address}</p>
+                    <p className="text-gray-600 text-sm leading-relaxed">{fullAddress}</p>
                   </div>
                 </div>
 
@@ -556,10 +544,10 @@ export default function Contact() {
                   <div className="min-w-0">
                     <h3 className="font-semibold text-gray-900 mb-1">Phone</h3>
                     <a
-                      href={`tel:${RESTAURANT.phone.replace(/\s/g, '')}`}
+                      href={`tel:${restaurantConfig.phone.replace(/\s/g, '')}`}
                       className="text-gray-600 hover:text-orange-600 transition-colors text-sm"
                     >
-                      {RESTAURANT.phoneDisplay}
+                      {restaurantConfig.phoneDisplay}
                     </a>
                     <p className="text-xs text-gray-400 mt-1">WhatsApp available on this number</p>
                   </div>
@@ -573,10 +561,10 @@ export default function Contact() {
                   <div className="min-w-0">
                     <h3 className="font-semibold text-gray-900 mb-1">Email</h3>
                     <a
-                      href={`mailto:${RESTAURANT.email}`}
+                      href={`mailto:${restaurantConfig.email}`}
                       className="text-gray-600 hover:text-orange-600 transition-colors text-sm break-all"
                     >
-                      {RESTAURANT.email}
+                      {restaurantConfig.email}
                     </a>
                   </div>
                 </div>
@@ -588,8 +576,8 @@ export default function Contact() {
                   </div>
                   <div className="min-w-0">
                     <h3 className="font-semibold text-gray-900 mb-1">Opening Hours</h3>
-                    <p className="text-gray-600 text-sm">{RESTAURANT.hours}</p>
-                    <p className="font-semibold text-orange-600 text-sm">{RESTAURANT.hoursValue}</p>
+                    <p className="text-gray-600 text-sm">{restaurantConfig.openingHoursDays}</p>
+                    <p className="font-semibold text-orange-600 text-sm">{restaurantConfig.openingHoursTimes}</p>
                   </div>
                 </div>
               </div>
@@ -597,14 +585,14 @@ export default function Contact() {
               {/* Action buttons */}
               <div className="mt-8 grid grid-cols-2 gap-3">
                 <a
-                  href={`tel:${RESTAURANT.phone.replace(/\s/g, '')}`}
+                  href={`tel:${restaurantConfig.phone.replace(/\s/g, '')}`}
                   className="flex items-center justify-center space-x-2 bg-orange-600 hover:bg-orange-700 text-white py-3 rounded-lg font-semibold transition-colors duration-200 text-sm shadow-sm hover:shadow-md"
                 >
                   <Phone className="w-4 h-4" />
                   <span>Call Us</span>
                 </a>
                 <a
-                  href={RESTAURANT.mapsUrl}
+                  href={restaurantConfig.mapsUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center space-x-2 bg-gray-100 hover:bg-gray-200 text-gray-800 py-3 rounded-lg font-semibold transition-colors duration-200 text-sm"
@@ -626,19 +614,25 @@ export default function Contact() {
                 or give us a call to reserve a table for your group.
               </p>
               <a
-                href={`tel:${RESTAURANT.phone.replace(/\s/g, '')}`}
+                href={`tel:${restaurantConfig.phone.replace(/\s/g, '')}`}
                 className="inline-block bg-white text-orange-600 hover:bg-orange-50 px-5 py-2.5 rounded-lg font-semibold transition-colors duration-200 text-sm"
               >
-                Call: {RESTAURANT.phoneDisplay}
+                Call: {restaurantConfig.phoneDisplay}
               </a>
             </div>
           </div>
         </div>
 
-        {/* ── Map ─────────────────────────────────────────────────────── */}
+        {/* ── Find Us / Map ──────────────────────────────────────────────── */}
+        <div className="mb-4 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">Find Us</h2>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            Come and enjoy authentic vegetarian Indian and Indo-Chinese flavours.
+          </p>
+        </div>
         <div className="rounded-2xl overflow-hidden shadow-lg h-80 sm:h-96">
           <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2486.892!2d0.1855!3d51.5812!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNTHCsDM0JzUyLjMiTiAwwrAxMScxNS44Ilc!5e0!3m2!1sen!2suk!4v1700000000000"
+            src={restaurantConfig.mapEmbedUrl}
             width="100%"
             height="100%"
             style={{ border: 0 }}
@@ -647,6 +641,17 @@ export default function Contact() {
             referrerPolicy="no-referrer-when-downgrade"
             title="Spice Garden Location"
           ></iframe>
+        </div>
+        <div className="text-center mt-4">
+          <a
+            href={restaurantConfig.mapsUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center space-x-2 bg-orange-600 hover:bg-orange-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors duration-200"
+          >
+            <NavIcon className="w-5 h-5" />
+            <span>Get Directions</span>
+          </a>
         </div>
       </div>
     </div>
